@@ -1,0 +1,21 @@
+server:
+  http:
+    port: 8081
+
+  static:
+    location: "webapp/build"
+
+environment:
+  environment: "develop"
+  variables:
+    catalogue_api_url: "http://localhost:8080/api/v1"
+    catalogue_api_token: "810c08b78b8ad6a6a5787ed4a1eefb40"
+    catalogue_api_security: "39e8a402f197ea01b84ed1754c21e950"
+    intelligence_api_report_url: "https://reprt-intelligence-v4.sizebay.technology"
+    gmerchant_api_url: "https://gmerchant-staging.sizebay.eu"
+    implantation_vfr_directory: "szb-tenants-production"
+    content_delivery_id_implantation_vfr: "E21KPL1ZUXO5FZ"
+    db_host: "catalogue-production3.cdj3r8oge0ji.us-east-1.rds.amazonaws.com"
+    db_name: "catalogue_production3"
+    db_user: "api_sizebay"
+    db_password: "8b9d3f29bab970b08d326ef43080f432"

@@ -1,0 +1,105 @@
+modelVersion: 4.0.0
+
+parent:
+  groupId: io.skullabs.kikaha
+  artifactId: kikaha-project
+  version: 2.1.8.Final
+
+groupId: sizebay.apps
+artifactId: my-sizebay-api
+version: 1.0.0-SNAPSHOT
+packaging: jar
+
+properties:
+  # VERSIONS
+  version.java: 11
+  version.aws: 1.11.125
+  version.lombok: 1.18.8
+  version.kikaha: 2.1.8.Final
+  version.logback: 1.2.3
+  version.kikaha.caffeine: 0.2.0
+  version.kikaha.jdbi3: 0.3.0
+  version.mysql.connector: 5.1.38
+
+  # PROJECT STRUCTURE
+  config.dir.source: ${project.basedir}/source
+  config.dir.resource: ${project.basedir}/resources
+  config.dir.test.source: ${project.basedir}/tests
+  config.dir.test.resource: ${project.basedir}/tests-resources
+  config.dir.output: ${project.basedir}/output
+  config.dir.web: ${project.basedir}/webapp
+  config.plugins.jar.enabled: true
+
+dependencies:
+  - { groupId: io.skullabs.kikaha, artifactId: kikaha-core, version: "${version.kikaha}" }
+  - { groupId: io.skullabs.kikaha, artifactId: kikaha-urouting, version: "${version.kikaha}" }
+  - { groupId: io.skullabs.kikaha, artifactId: kikaha-jackson, version: "${version.kikaha}" }
+  - { groupId: io.skullabs.kikaha, artifactId: kikaha-caffeine, version: "${version.kikaha.caffeine}" }
+  - { groupId: io.skullabs.kikaha, artifactId: kikaha-db, version: "${version.kikaha}" }
+  - { groupId: io.skullabs.kikaha, artifactId: kikaha-jdbi3, version: "${version.kikaha.jdbi3}" }
+  - { groupId: ch.qos.logback, artifactId: logback-classic, version: "${version.logback}" }
+  - { groupId: mysql, artifactId: mysql-connector-java, version: "${version.mysql.connector}" }
+
+build:
+  plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      version: 3.8.1
+      configuration:
+        source: "${version.java}"
+        target: "${version.java}"
+
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-surefire-plugin
+      version: 3.0.0-M3
+      executions:
+        - { id: default-test, phase: test, goals: ["test"] }
+      configuration:
+        testSourceDirectory: "${config.dir.test.source}"
+        failIfNoTests: false
+
+profiles:
+  - id: deploy
+    build:
+      defaultGoal: clean package
+      plugins:
+        - groupId: org.apache.maven.plugins
+          artifactId: maven-assembly-plugin
+          version: 3.1.1
+          executions:
+            - { phase: package, goals: ["single"] }
+          configuration:
+            attach: false
+            appendAssemblyId: false
+            descriptors: ["${project.basedir}/aws-code-deploy/zip-package.xml"]
+            archiveBaseDirectory: "${project.basedir}/aws-code-deploy/"
+
+        - groupId: org.codehaus.mojo
+          artifactId: exec-maven-plugin
+          version: 1.6.0
+          executions:
+            - {
+                id: buildWeb,
+                phase: generate-sources,
+                goals: ["exec"],
+                configuration:
+                  {
+                    workingDirectory: "${project.basedir}/webapp/",
+                    executable: "yarn",
+                    arguments: ["build"],
+                  },
+              }
+            - {
+                id: deploy,
+                phase: package,
+                goals: ["exec"],
+                configuration:
+                  {
+                    workingDirectory: "${project.basedir}",
+                    executable: "${project.basedir}/code-deploy",
+                    arguments: ["deploy"],
+                  },
+              }
+    dependencies:
+      - { groupId: io.skullabs.kikaha, artifactId: kikaha-cloud-metrics, version: "${version.kikaha}" }
+      - { groupId: io.skullabs.kikaha, artifactId: kikaha-cloud-aws-cloudwatch, version: "${version.kikaha}" }

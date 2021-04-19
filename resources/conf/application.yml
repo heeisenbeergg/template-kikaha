@@ -1,0 +1,47 @@
+server:
+  http:
+    port: 8080
+
+  static:
+    enabled: true
+
+  smart-server:
+    application:
+      name: "MySizebay - API"
+
+  smart-routes:
+    rewrite:
+      - path: "/v1/{path}"
+        to: "/{path}"
+
+    cors:
+      enabled: true
+      always-allow-origin: true
+      always-allow-credentials: true
+      allowed-methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+
+  urouting:
+    default-content-type: "application/json"
+    content-type-priority: "CONFIG"
+
+  auth:
+    session-store: kikaha.caffeine.CaffeineSessionStore
+    session-id-manager: sizebay.my.shared.infra.http.security.SessionIdManager
+    auth-mechanisms:
+      basic-authenticate: sizebay.my.shared.infra.http.security.Authentication
+    identity-managers:
+      mysizebay: sizebay.my.shared.infra.http.security.Authentication
+    default-excluded-patterns: ["/api/internal/health-check"]
+    rules:
+      - pattern: "/v1/*"
+        auth-mechanisms:
+          - "basic-authenticate"
+        identity-managers:
+          - "mysizebay"
+
+  db:
+    datasource-factory: sizebay.my.shared.infra.database.jdbi.JDBIDatabase
+
+  health-check:
+    enabled: true
+    url: "/api/internal/health-check"

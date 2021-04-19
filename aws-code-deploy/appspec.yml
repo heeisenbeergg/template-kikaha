@@ -1,0 +1,28 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /opt/application
+
+permissions:
+  - object: /opt/application
+    pattern: "*.sh"
+    owner: ec2-user
+    group: ec2-user
+    mode: 500
+    type:
+      - file
+
+hooks:
+  BeforeInstall:
+    - location: hooks/before-install.sh
+  ApplicationStart:
+    - location: hooks/application-start.sh
+      timeout: 60
+  ApplicationStop:
+    - location: hooks/application-stop.sh
+      timeout: 60
+  ValidateService:
+    - location: hooks/validate-service.sh
+      timeout: 300
