@@ -1,105 +1,172 @@
-modelVersion: 4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-parent:
-  groupId: io.skullabs.kikaha
-  artifactId: kikaha-project
-  version: 2.1.8.Final
+	<parent>
+		<groupId>io.skullabs.kikaha</groupId>
+		<version>2.1.8.Final</version>
+		<artifactId>kikaha-project</artifactId>
+	</parent>
 
-groupId: sizebay.apps
-artifactId: my-sizebay-api
-version: 1.0.0-SNAPSHOT
-packaging: jar
+	<groupId></groupId>
+	<artifactId></artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>${project.artifactId}</name>
 
-properties:
-  # VERSIONS
-  version.java: 11
-  version.aws: 1.11.125
-  version.lombok: 1.18.8
-  version.kikaha: 2.1.8.Final
-  version.logback: 1.2.3
-  version.kikaha.caffeine: 0.2.0
-  version.kikaha.jdbi3: 0.3.0
-  version.mysql.connector: 5.1.38
+	<properties>
+		<!-- variables -->
+		<version.java>11</version.java>
+		<version.aws>1.11.125</version.aws>
+		<version.lombok>1.18.8</version.lombok>
+		<version.kikaha>2.1.8.Final</version.kikaha>
+		<version.logback>1.2.3</version.logback>
+		<version.kikaha.caffeine>0.2.0</version.kikaha.caffeine>
+		<version.kikaha.jdbi3>0.3.0</version.kikaha.jdbi3>
+		<version.mysql.connector>5.1.38</version.mysql.connector>
 
-  # PROJECT STRUCTURE
-  config.dir.source: ${project.basedir}/source
-  config.dir.resource: ${project.basedir}/resources
-  config.dir.test.source: ${project.basedir}/tests
-  config.dir.test.resource: ${project.basedir}/tests-resources
-  config.dir.output: ${project.basedir}/output
-  config.dir.web: ${project.basedir}/webapp
-  config.plugins.jar.enabled: true
+		<!-- project structure -->
+		<config.dir.source>source</config.dir.source>
+		<config.dir.resource>resources</config.dir.resource>
+		<config.dir.test.source>tests</config.dir.test.source>
+		<config.dir.test.resource>tests-resources</config.dir.test.resource>
+		<config.dir.output>output</config.dir.output>
+		<config.dir.web>${project.basedir}/webapp</config.dir.web>
 
-dependencies:
-  - { groupId: io.skullabs.kikaha, artifactId: kikaha-core, version: "${version.kikaha}" }
-  - { groupId: io.skullabs.kikaha, artifactId: kikaha-urouting, version: "${version.kikaha}" }
-  - { groupId: io.skullabs.kikaha, artifactId: kikaha-jackson, version: "${version.kikaha}" }
-  - { groupId: io.skullabs.kikaha, artifactId: kikaha-caffeine, version: "${version.kikaha.caffeine}" }
-  - { groupId: io.skullabs.kikaha, artifactId: kikaha-db, version: "${version.kikaha}" }
-  - { groupId: io.skullabs.kikaha, artifactId: kikaha-jdbi3, version: "${version.kikaha.jdbi3}" }
-  - { groupId: ch.qos.logback, artifactId: logback-classic, version: "${version.logback}" }
-  - { groupId: mysql, artifactId: mysql-connector-java, version: "${version.mysql.connector}" }
+		<!-- project configurations -->
+		<config.plugins.jar.enabled>true</config.plugins.jar.enabled>
 
-build:
-  plugins:
-    - groupId: org.apache.maven.plugins
-      artifactId: maven-compiler-plugin
-      version: 3.8.1
-      configuration:
-        source: "${version.java}"
-        target: "${version.java}"
 
-    - groupId: org.apache.maven.plugins
-      artifactId: maven-surefire-plugin
-      version: 3.0.0-M3
-      executions:
-        - { id: default-test, phase: test, goals: ["test"] }
-      configuration:
-        testSourceDirectory: "${config.dir.test.source}"
-        failIfNoTests: false
+	</properties>
 
-profiles:
-  - id: deploy
-    build:
-      defaultGoal: clean package
-      plugins:
-        - groupId: org.apache.maven.plugins
-          artifactId: maven-assembly-plugin
-          version: 3.1.1
-          executions:
-            - { phase: package, goals: ["single"] }
-          configuration:
-            attach: false
-            appendAssemblyId: false
-            descriptors: ["${project.basedir}/aws-code-deploy/zip-package.xml"]
-            archiveBaseDirectory: "${project.basedir}/aws-code-deploy/"
+	<dependencies>
+		<!-- Kikaha Core Dependencies -->
+		<dependency>
+			<groupId>io.skullabs.kikaha</groupId>
+			<artifactId>kikaha-core</artifactId>
+			<version>${version.kikaha}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.kikaha</groupId>
+			<artifactId>kikaha-urouting</artifactId>
+			<version>${version.kikaha}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.kikaha</groupId>
+			<artifactId>kikaha-jackson</artifactId>
+			<version>${version.kikaha}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.kikaha</groupId>
+			<artifactId>kikaha-caffeine</artifactId>
+			<version>${version.kikaha.caffeine}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.kikaha</groupId>
+			<artifactId>kikaha-db</artifactId>
+			<version>${version.kikaha}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.skullabs.kikaha</groupId>
+			<artifactId>kikaha-jdbi3</artifactId>
+			<version>${version.kikaha.jdbi3}</version>
+		</dependency>
+		<!-- Logging dependencies -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${version.logback}</version>
+		</dependency>
+		<!-- Other dependencies -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${version.lombok}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
-        - groupId: org.codehaus.mojo
-          artifactId: exec-maven-plugin
-          version: 1.6.0
-          executions:
-            - {
-                id: buildWeb,
-                phase: generate-sources,
-                goals: ["exec"],
-                configuration:
-                  {
-                    workingDirectory: "${project.basedir}/webapp/",
-                    executable: "yarn",
-                    arguments: ["build"],
-                  },
-              }
-            - {
-                id: deploy,
-                phase: package,
-                goals: ["exec"],
-                configuration:
-                  {
-                    workingDirectory: "${project.basedir}",
-                    executable: "${project.basedir}/code-deploy",
-                    arguments: ["deploy"],
-                  },
-              }
-    dependencies:
-      - { groupId: io.skullabs.kikaha, artifactId: kikaha-cloud-metrics, version: "${version.kikaha}" }
-      - { groupId: io.skullabs.kikaha, artifactId: kikaha-cloud-aws-cloudwatch, version: "${version.kikaha}" }
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>default-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<testSourceDirectory>${config.dir.test.source}</testSourceDirectory>
+					<failIfNoTests>true</failIfNoTests>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>deploy</id>
+			<build>
+				<defaultGoal>clean package</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>3.1.1</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<attach>false</attach>
+									<appendAssemblyId>false</appendAssemblyId>
+									<descriptors>
+										<descriptor>${project.basedir}/aws-code-deploy/zip-package.xml</descriptor>
+									</descriptors>
+									<archiveBaseDirectory>${project.basedir}/aws-code-deploy/</archiveBaseDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						<executions>
+							<execution>
+								<id>deploy</id>
+								<phase>package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<workingDirectory>${project.basedir}</workingDirectory>
+									<executable>${project.basedir}/code-deploy</executable>
+									<arguments>
+										<argument>deploy</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
