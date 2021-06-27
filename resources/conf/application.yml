@@ -26,21 +26,21 @@ server:
 
   auth:
     session-store: kikaha.caffeine.CaffeineSessionStore
-    session-id-manager: my.project.shared.infra.http.security.sessions.SessionManager
-    auth-mechanisms:
-      basic-authenticate: my.project.shared.infra.http.security.authentications.BasicAuthentication
-    identity-managers:
-      session-manager: my.project.shared.infra.http.security.authentications.BasicAuthentication
-    default-excluded-patterns: ["/api/internal/health-check"]
-    rules:
-      - pattern: "/v1/*"
-        auth-mechanisms:
-          - "basic-authenticate"
-        identity-managers:
-          - "session-manager"
-
-  db:
-    datasource-factory: my.project.shared.infra.database.jdbi.JDBIDatabase
+#    session-id-manager: my.project.shared.infra.http.security.sessions.SessionManager
+#    auth-mechanisms:
+#      basic-authenticate: my.project.shared.infra.http.security.authentications.BasicAuthentication
+#    identity-managers:
+#      session-manager: my.project.shared.infra.http.security.authentications.BasicAuthentication
+#    default-excluded-patterns: ["/api/internal/health-check"]
+#    rules:
+#      - pattern: "/v1/*"
+#        auth-mechanisms:
+#          - "basic-authenticate"
+#        identity-managers:
+#          - "session-manager"
+#
+#  db:
+#    datasource-factory: my.project.shared.infra.database.jdbi.JDBIDatabase
 
   health-check:
     enabled: true

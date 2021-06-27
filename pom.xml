@@ -128,7 +128,7 @@
 				</executions>
 				<configuration>
 					<testSourceDirectory>${config.dir.test.source}</testSourceDirectory>
-					<failIfNoTests>true</failIfNoTests>
+					<failIfNoTests>false</failIfNoTests>
 				</configuration>
 			</plugin>
 		</plugins>

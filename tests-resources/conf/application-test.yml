@@ -2,13 +2,10 @@ server:
   http:
     port: 8081
 
-  static:
-    location: "webapp/build"
-
 environment:
   environment: "develop"
   variables:
-    db_host: ""
-    db_name: ""
-    db_user: ""
-    db_password: ""
+    db_host: "http://localhost:33060"
+    db_name: "my_project"
+    db_user: "admin"
+    db_password: "123"
