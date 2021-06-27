@@ -8,13 +8,6 @@ server:
 environment:
   environment: "develop"
   variables:
-    catalogue_api_url: ""
-    catalogue_api_token: ""
-    catalogue_api_security: ""
-    intelligence_api_report_url: ""
-    gmerchant_api_url: ""
-    implantation_vfr_directory: ""
-    content_delivery_id_implantation_vfr: ""
     db_host: ""
     db_name: ""
     db_user: ""

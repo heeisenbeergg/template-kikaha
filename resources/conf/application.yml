@@ -7,7 +7,7 @@ server:
 
   smart-server:
     application:
-      name: "MySizebay - API"
+      name: "My Project"
 
   smart-routes:
     rewrite:
@@ -26,21 +26,21 @@ server:
 
   auth:
     session-store: kikaha.caffeine.CaffeineSessionStore
-    session-id-manager: sizebay.my.shared.infra.http.security.SessionIdManager
+    session-id-manager: my.project.shared.infra.http.security.sessions.SessionManager
     auth-mechanisms:
-      basic-authenticate: sizebay.my.shared.infra.http.security.Authentication
+      basic-authenticate: my.project.shared.infra.http.security.authentications.BasicAuthentication
     identity-managers:
-      mysizebay: sizebay.my.shared.infra.http.security.Authentication
+      session-manager: my.project.shared.infra.http.security.authentications.BasicAuthentication
     default-excluded-patterns: ["/api/internal/health-check"]
     rules:
       - pattern: "/v1/*"
         auth-mechanisms:
           - "basic-authenticate"
         identity-managers:
-          - "mysizebay"
+          - "session-manager"
 
   db:
-    datasource-factory: sizebay.my.shared.infra.database.jdbi.JDBIDatabase
+    datasource-factory: my.project.shared.infra.database.jdbi.JDBIDatabase
 
   health-check:
     enabled: true
